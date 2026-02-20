@@ -27,10 +27,7 @@ public class FirstTest {
                 "A/B Testing page did not open."
         );
 
-        // Go back to homepage
         driver.navigate().back();
-
-        // 5-second wait for future homepage logic
         sleep(5000);
     }
 
@@ -42,14 +39,27 @@ public class FirstTest {
                 "Add/Remove Elements page did not open."
         );
 
+        // Add one element
+        driver.findElement(By.xpath("//button[text()='Add Element']")).click();
+
+        // Delete the element
+        driver.findElement(By.xpath("//button[text()='Delete']")).click();
+
+        // Add 3 elements
+        for (int i = 0; i < 3; i++) {
+            driver.findElement(By.xpath("//button[text()='Add Element']")).click();
+        }
+
+        // Delete all 3 elements
+        for (int i = 0; i < 3; i++) {
+            driver.findElement(By.xpath("//button[text()='Delete']")).click();
+        }
+
         // Go back to homepage
         driver.navigate().back();
-
-        // 5-second wait again
         sleep(5000);
     }
 
-    // Helper method for clean sleeps
     private void sleep(long ms) {
         try {
             Thread.sleep(ms);
@@ -58,7 +68,7 @@ public class FirstTest {
 
     @AfterClass
     public void tearDown() {
-        // DO NOT CLOSE until you say so
+        // Do not close until you say so
         // driver.quit();
     }
 }
