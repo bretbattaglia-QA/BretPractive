@@ -71,4 +71,46 @@ public class FirstTest {
         // Do not close until you say so
         // driver.quit();
     }
+    @Test(priority = 3)
+    public void testBasicAuth() {
+
+        // Step 1: Click Basic Auth link
+        driver.findElement(By.linkText("Basic Auth")).click();
+
+        // Step 2: Login with admin/admin using URL authentication
+        driver.get("https://admin:admin@the-internet.herokuapp.com/basic_auth");
+
+        // Step 3: Verify authorized
+        String successText = driver.findElement(By.tagName("p")).getText();
+        Assert.assertTrue(
+                successText.contains("Congratulations"),
+                "Admin/Admin login did not authorize correctly."
+        );
+
+        // Step 4: Go back to the main homepage
+        driver.get("https://the-internet.herokuapp.com/");
+        sleep(5000);
+
+        // Step 5: Click Basic Auth again
+        driver.findElement(By.linkText("Basic Auth")).click();
+
+        // Step 6: Login with bret/bret (expected to FAIL)
+        driver.get("https://bret:bret@the-internet.herokuapp.com/basic_auth");
+
+        // Step 7: Verify NOT authorized (this is a PASS condition)
+        boolean unauthorized =
+                driver.getPageSource().toLowerCase().contains("not authorized")
+                        || driver.getPageSource().toLowerCase().contains("unauthorized")
+                        || driver.getTitle().contains("401")
+                        || driver.getCurrentUrl().contains("basic_auth") == false;
+
+        Assert.assertTrue(
+                unauthorized,
+                "Expected Bret/Bret to be unauthorized, but the page did not show an unauthorized state."
+        );
+
+        // Step 8: Return to homepage
+        driver.get("https://the-internet.herokuapp.com/");
+        sleep(5000);
+    }
 }
