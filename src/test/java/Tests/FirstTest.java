@@ -72,6 +72,7 @@ public class FirstTest {
         // driver.quit();
     }
     @Test(priority = 3)
+
     public void testBasicAuth() {
 
         // Step 1: Click Basic Auth link
@@ -94,10 +95,10 @@ public class FirstTest {
         // Step 5: Click Basic Auth again
         driver.findElement(By.linkText("Basic Auth")).click();
 
-        // Step 6: Login with bret/bret (expected to FAIL)
+        // Step 6: Attempt login with bret/bret (expected to fail)
         driver.get("https://bret:bret@the-internet.herokuapp.com/basic_auth");
 
-        // Step 7: Verify NOT authorized (this is a PASS condition)
+        // Step 7: Verify NOT authorized (expected failure = PASS)
         boolean unauthorized =
                 driver.getPageSource().toLowerCase().contains("not authorized")
                         || driver.getPageSource().toLowerCase().contains("unauthorized")
@@ -109,7 +110,11 @@ public class FirstTest {
                 "Expected Bret/Bret to be unauthorized, but the page did not show an unauthorized state."
         );
 
-        // Step 8: Return to homepage
+        // Step 8: Simulate CANCEL by returning to the login page
+        // (Selenium cannot click Cancel on browser auth dialogs)
+        driver.get("https://the-internet.herokuapp.com/basic_auth");
+
+        // Step 9: Return to homepage (test passed)
         driver.get("https://the-internet.herokuapp.com/");
         sleep(5000);
     }
